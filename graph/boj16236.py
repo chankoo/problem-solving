@@ -2,7 +2,6 @@
 
 # sol
 # 상어객체를 구현하여 bfs로 최단거리의 가능한 먹이를 탐색한다
-# 먹이의 딕셔너리(fish_dic)에 대해서
 # 1) bfs하며 최단거리이면서 (여럿일 경우 위쪽/왼쪽순) 먹을 수 있는(상어보다 사이즈 작은) 먹이 탐색
 #   1-1) 이때 가능한 먹이가 여럿일 수 있기에 bfs 큐에 상어 이동거리를 포함하는 변형이 들어간다
 #   1-2) 가능한 먹이가 없으면 그때까지 상어 이동거리를 return하고 끝낸다 
@@ -88,7 +87,6 @@ if __name__ == "__main__":
     n = int(sys.stdin.readline())
     
     space = []
-    fish_dic = {}
     shark = Shark()
     
     for r in range(n):
@@ -97,22 +95,19 @@ if __name__ == "__main__":
         for c, val in enumerate(row):
             if val == 9:
                 shark.set_loc(r, c)
-            elif val != 0:
-                fish_dic[(r, c)] = val
 
-    while len(fish_dic) > 0:
+    while True:
         # 먹이 탐색
         min_dist, target_loc = bfs_find_fish(shark)
         if min_dist == MAX:
             break
 
-        # 상어의 이동과 상태변화, 그리고 fish_dic의 조정
+        # 상어의 이동과 상태변화를 조정
         space[shark.r][shark.c] = 0 
         shark.set_loc(target_loc[0],target_loc[1])
         shark.food_cnt_up()
         space[target_loc[0]][target_loc[1]] = 0
         shark.plus_total(min_dist)
-        del fish_dic[(target_loc[0],target_loc[1])]
 
     print(shark.total_time)
 
