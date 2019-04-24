@@ -5,7 +5,6 @@
 # 그 시간을 조건으로 bfs_dotch를 돌려 고슴도치를 이동시킨다
 
 import sys
-from queue import PriorityQueue
 from collections import deque
 
 MAX = 987654321
@@ -14,19 +13,19 @@ def bfs_flooding():
     global Map, R, C, water
 
     water_map = [[MAX for _ in range(C)] for _ in range(R)]
-    q = PriorityQueue()
+    q = deque()
     for (r,c) in water:
-        q.put((0,r,c))
+        q.append((0,r,c))
         water_map[r][c] = 0
 
-    while not q.empty():
-        time,r,c = q.get()
+    while len(q) > 0:
+        time,r,c = q.popleft()
 
         for dr,dc in [(1,0),(0,1),(-1,0),(0,-1)]:
             n_r = r+dr; n_c = c+dc
 
             if 0<=n_r<R and 0<=n_c<C and water_map[n_r][n_c]==MAX and Map[n_r][n_c] not in ['X','D']:
-                q.put((time+1,n_r,n_c))
+                q.append((time+1,n_r,n_c))
                 water_map[n_r][n_c] = time+1
 
     return water_map
