@@ -19,7 +19,11 @@ def bfs(is_wall):
 
     while len(q) > 0:
         x, y = q.popleft()
-
+        
+        for i in range(n):
+            print()
+            for j in range(m):
+                print(visited[i][j], end=' ')
         if x == m-1 and y == n-1:
             if all(visited[y][x]):
                 print(min(visited[y][x]))
@@ -30,32 +34,42 @@ def bfs(is_wall):
         for dx,dy in dxdy:
             if 0 <= (x+dx) < m and 0 <= (y+dy) < n: # 기본조건(주어진 배열크기를 벗어나지 않아야함)
                 
-                if all(visited[y][x]): # 해당 위치가 1) 벽부숨없이 진행한 경로 2) 벽부수고 진행한 경로 에 공통으로 속한 위치라면
+                # 해당 위치가 1) 벽부숨없이 진행한 경로 2) 벽부수고 진행한 경로 에 공통으로 속한 위치라면
+                if all(visited[y][x]): 
                     # 1) 벽부숨없이 진행한 경로의 경우
-                    if is_wall[y+dy][x+dx] == 0 and visited[y+dy][x+dx][0] == 0: # 벽이 아닌 지점은 큐에 추가
+                    # 길은 큐에 추가
+                    if is_wall[y+dy][x+dx] == 0 and visited[y+dy][x+dx][0] == 0: 
                         q.append((x+dx,y+dy))
                         visited[y+dy][x+dx][0] = visited[y][x][0] + 1
-                    elif is_wall[y+dy][x+dx] == 1 and visited[y+dy][x+dx][0] == 0: # 벽을 만난 경우 부수고 벽이있던 자리로 이동
+                    # 벽도 큐에 추가(뿌시기)하고 벽부순 배열에 방문체크
+                    elif is_wall[y+dy][x+dx] == 1 and visited[y+dy][x+dx][0] == 0: 
                         q.append((x+dx,y+dy))
                         visited[y+dy][x+dx][1] = visited[y][x][0] + 1
                     
                     # 2) 벽부수고 진행한 경로의 경우
-                    if is_wall[y+dy][x+dx] == 0 and visited[y+dy][x+dx][1] == 0: # 벽이 아닌 지점만 큐에 추가
+                    # 길만 큐에 추가
+                    if is_wall[y+dy][x+dx] == 0 and visited[y+dy][x+dx][1] == 0: 
                         q.append((x+dx,y+dy))
                         visited[y+dy][x+dx][1] = visited[y][x][1] + 1 
                 
-                elif visited[y][x][0] != 0: # 해당 위치가 1) 벽부숨없이 진행한 경로에 속한다면
-                    if is_wall[y+dy][x+dx] == 0 and visited[y+dy][x+dx][0] == 0: # 벽이 아닌 지점
+                # 해당 위치가 1) 벽부숨없이 진행한 경로에 속한다면
+                elif visited[y][x][0] != 0: 
+                    # 길은 큐에 추가
+                    if is_wall[y+dy][x+dx] == 0 and visited[y+dy][x+dx][0] == 0: 
                         q.append((x+dx,y+dy))
                         visited[y+dy][x+dx][0] = visited[y][x][0] + 1
-                    elif is_wall[y+dy][x+dx] == 1 and visited[y+dy][x+dx][0] == 0: # 벽을 만난 경우 부수고 벽이있던 자리로 이동
+                    # 벽도 큐에추가하고 벽부순 배열에 방문 체크
+                    elif is_wall[y+dy][x+dx] == 1 and visited[y+dy][x+dx][0] == 0: 
                         q.append((x+dx,y+dy))
                         visited[y+dy][x+dx][1] = visited[y][x][0] + 1
 
-                else: # 해당 위치가 2) 벽부수고 진행한 경로에 속한다면
-                    if is_wall[y+dy][x+dx] == 0 and visited[y+dy][x+dx][1] == 0: # 벽이 아닌 지점
+                # 해당 위치가 2) 벽부수고 진행한 경로에 속한다면
+                else: 
+                    # 길만 큐에 추가하고 방문체크는 역시 벽부순 배열에 진행
+                    if is_wall[y+dy][x+dx] == 0 and visited[y+dy][x+dx][1] == 0:
                         q.append((x+dx,y+dy))
                         visited[y+dy][x+dx][1] = visited[y][x][1] + 1 
+        print('!!!',(y,x))
     print(-1)
     return
 
